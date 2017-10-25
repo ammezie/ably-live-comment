@@ -1,18 +1,39 @@
 import React, { Component } from 'react';
+import CommentBox from './CommentBox';
+import Comments from './Comments';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props);
+
+		this.handleAddComment = this.handleAddComment.bind(this);
+		this.state = {
+			comments: []
+		}
+	}
+
+	handleAddComment(comment) {
+		this.setState((prevState) => {
+			return {
+				comments: prevState.comments.concat(comment)
+			};
+		});
+	}
+
+  	render() {
+    	return (
+			<section className="section">
+				<div className="container">
+					<div className="columns">
+                		<div className="column is-half is-offset-one-quarter">
+							<CommentBox handleAddComment={this.handleAddComment} />
+							<Comments comments={this.state.comments} />
+						</div>
+					</div>
+				</div>
+			</section>
+		);
+  	}
 }
 
 export default App;
