@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Ably from '../ably';
 
 class CommentBox extends Component {
     constructor(props) {
@@ -28,6 +29,10 @@ class CommentBox extends Component {
             // Clear input fields
             e.target.elements.comment.value = '';
             e.target.elements.name.value = '';
+
+            // Broadcast comment
+            const channel = Ably.channels.get('comments');
+            channel.publish('add_comment', commentObject);
         }
     }
 
