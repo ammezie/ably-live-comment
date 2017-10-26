@@ -13,7 +13,9 @@ class App extends Component {
 	}
 
 	componentDidMount() {
+		// Subscribe to comments
 		const channel = Ably.channels.get('comments');
+
 		channel.subscribe('add_comment', (message) => {
 			this.setState((prevState) => {
 				return {
@@ -24,7 +26,6 @@ class App extends Component {
 				};
 			});
 		});
-
 	}
 
   	render() {
