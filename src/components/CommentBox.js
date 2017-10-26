@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import Ably from '../ably';
 
 class CommentBox extends Component {
-    constructor(props) {
-        super(props);
-
-        this.addComment = this.addComment.bind(this);
-    }
-
     addComment(e) {
         // Prevent the default behaviour of form submit
         e.preventDefault();
@@ -24,15 +18,13 @@ class CommentBox extends Component {
                 comment
             }
 
-            this.props.handleAddComment(commentObject);
+            // Publish comment
+            const channel = Ably.channels.get('comments');
+            channel.publish('add_comment', commentObject);
 
             // Clear input fields
             e.target.elements.comment.value = '';
             e.target.elements.name.value = '';
-
-            // Broadcast comment
-            const channel = Ably.channels.get('comments');
-            channel.publish('add_comment', commentObject);
         }
     }
 

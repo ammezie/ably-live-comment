@@ -7,7 +7,6 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.handleAddComment = this.handleAddComment.bind(this);
 		this.state = {
 			comments: []
 		}
@@ -16,21 +15,16 @@ class App extends Component {
 	componentDidMount() {
 		const channel = Ably.channels.get('comments');
 		channel.subscribe('add_comment', (message) => {
-			const name = message.data.name;
-			const comment = message.data.comment;
-
-			this.handleAddComment({ name, comment });
-			console.log(message.data);
+			this.setState((prevState) => {
+				return {
+					comments: prevState.comments.concat({
+						name: message.data.name,
+						comment: message.data.comment
+					})
+				};
+			});
 		});
 
-	}
-
-	handleAddComment(comment) {
-		this.setState((prevState) => {
-			return {
-				comments: prevState.comments.concat(comment)
-			};
-		});
 	}
 
   	render() {
@@ -39,7 +33,7 @@ class App extends Component {
 				<div className="container">
 					<div className="columns">
                 		<div className="column is-half is-offset-one-quarter">
-							<CommentBox handleAddComment={this.handleAddComment} />
+							<CommentBox />
 							<Comments comments={this.state.comments} />
 						</div>
 					</div>
