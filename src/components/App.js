@@ -16,12 +16,12 @@ class App extends Component {
 		// Subscribe to comments
 		const channel = Ably.channels.get('comments');
 
-		channel.subscribe('add_comment', (message) => {
+		channel.subscribe('add_comment', (comment) => {
 			this.setState((prevState) => {
 				return {
 					comments: prevState.comments.concat({
-						name: message.data.name,
-						comment: message.data.comment
+						name: comment.data.name,
+						comment: comment.data.comment
 					})
 				};
 			});
